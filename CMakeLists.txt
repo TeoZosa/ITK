@@ -90,17 +90,22 @@ include(CMakeDependentOption)
 include(ExternalProject)
 
 if( CMAKE_HOST_WIN32 )
-  if(NOT DEFINED ITK_SKIP_PATH_LENGTH_CHECKS)
+    if(NOT DEFINED ITK_SKIP_PATH_LENGTH_CHECKS OR NOT ITK_SKIP_PATH_LENGTH_CHECKS)
     if(${CMAKE_SYSTEM_VERSION} VERSION_GREATER "10.0.14392") # Win10 version 1607
       set(_LongPathKey LongPathsEnabled)
       execute_process(COMMAND reg query HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem /v ${_LongPathKey} OUTPUT_VARIABLE _output)
       string(REGEX MATCH "${_LongPathKey}.*REG_DWORD.*[0-9]x([0-9])" _regex ${_output})
       if (${CMAKE_MATCH_1})
-        set(ITK_SKIP_PATH_LENGTH_CHECKS 0 CACHE BOOL "Skips max path length checks. These checks can be disabled for Windows version 10.0.14393 and later if registry key HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem\\LongPathsEnabled is set to 1 and all tools support long paths. As of January 2018, MSBuild and Visual Studio do not support it yet.")
+          message("Windows LongPaths Enabled")
+        set(ITK_SKIP_PATH_LENGTH_CHECKS 1 CACHE BOOL "Skips max path length checks. These checks can be disabled for Windows version 10.0.14393 and later if registry key HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem\\LongPathsEnabled is set to 1 and all tools support long paths. As of January 2018, MSBuild and Visual Studio do not support it yet.")
+        set(ITK_SKIP_PATH_LENGTH_CHECKS 1)
       endif()
     endif()
   endif()
 endif()
+
+message("Skip path lengths: ")
+message(${ITK_SKIP_PATH_LENGTH_CHECKS})
 
 if( CMAKE_HOST_WIN32 AND NOT ITK_SKIP_PATH_LENGTH_CHECKS )
 
