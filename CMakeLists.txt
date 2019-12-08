@@ -50,8 +50,8 @@ enable_language(CXX)
 include(CMakeDependentOption)
 #
 # use ExternalProject
-include(ExternalProject
-    )
+include(ExternalProject)
+
 if( CMAKE_HOST_WIN32 )
     if(NOT DEFINED ITK_SKIP_PATH_LENGTH_CHECKS OR NOT ITK_SKIP_PATH_LENGTH_CHECKS)
     if(${CMAKE_SYSTEM_VERSION} VERSION_GREATER "10.0.14392") # Win10 version 1607
@@ -68,7 +68,6 @@ if( CMAKE_HOST_WIN32 )
 endif()
 
 if( CMAKE_HOST_WIN32 AND NOT ITK_SKIP_PATH_LENGTH_CHECKS )
-
   string( LENGTH "${CMAKE_CURRENT_SOURCE_DIR}" n )
   if( n GREATER 50 )
     message(
